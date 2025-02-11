@@ -5,6 +5,8 @@
 class ofApp : public ofBaseApp{
 
 	public:
+		float x = 100.f;
+
 		void setup();
 		void update();
 		void draw();
@@ -20,5 +22,4 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		
 };

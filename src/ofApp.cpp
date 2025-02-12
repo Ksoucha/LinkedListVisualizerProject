@@ -2,8 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	ofAddListener(ofGetWindowPtr()->events().keyPressed, this,
-		&ofApp::keycodePressed);
+	ofAddListener(ofGetWindowPtr()->events().keyPressed, this, &ofApp::keycodePressed);
 }
 
 //--------------------------------------------------------------
@@ -58,9 +57,9 @@ void ofApp::keyPressed(int key){
 //Code inspire de https://gist.github.com/stungeye/23580e5fef648e2798c069d9e7f83816
 void ofApp::keycodePressed(ofKeyEventArgs& e){
 
-	cout << "KEY : " << e.key << endl;
-	cout << "KEYCODE : " << e.keycode << endl;
-	cout << "MODIFIERS : " << e.modifiers << endl;
+	//cout << "KEY : " << e.key << endl;
+	//cout << "KEYCODE : " << e.keycode << endl;
+	//cout << "MODIFIERS : " << e.modifiers << endl;
 
 	if (e.keycode == 262)
 	{

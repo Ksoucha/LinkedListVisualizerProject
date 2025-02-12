@@ -27,6 +27,12 @@ class Node
 			data = 0;
 			next = nullptr;
 		}
+
+		Node(int data)
+		{
+			this->data = data;
+			this->next = nullptr;
+		}
 };
 
 class LinkedList
@@ -39,39 +45,40 @@ class LinkedList
 			head = nullptr;
 		}
 
-		/*void LinkedList::insertAtHead(int data)
+		void LinkedList::insertAtHead(int data)
 		{
-			Node* newNode = new Node(data);
+			Node* node = new Node(data);
 
 			//If the list is empty
 			if (head == nullptr) 
 			{
-				head = newNode;
+				head = node;
 				return;
 			}
 
-			newNode->next = this->head;
-			this->head = newNode;
-		}*/
+			node->next = head;
+			head = node;
+		}
 
-		/*void LinkedList::insertAtTail(int data)
+		void LinkedList::insertAtTail(int data)
 		{
-			Node* newNode = new Node(data);
+			Node* node = new Node(data);
 
 			//If the list is empty
 			if (head == nullptr)
 			{
-				head = newNode;
+				head = node;
 				return;
 			}
 
-			for (int i = 0; i < size_t; i++)
+			Node* currentNode = head;
+			while (currentNode->next != nullptr)
 			{
-				node = node->next;
+				currentNode = currentNode->next;
 			}
 
-			node->next = node;
-		}*/
+			currentNode->next = node;
+		}
 
 		/*void LinkedList::deleteHead()
 		{

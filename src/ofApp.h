@@ -22,4 +22,11 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+
+		void keycodePressed(ofKeyEventArgs& e);
+		//void insertAtHead(int data);
+		//void insertAtTail(int data);
+		//void deleteHead(int data);
+		//void deleteTail(int data);
+		//void sortLinkedList();
 };

@@ -17,40 +17,36 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	if (key == 'q')
+	switch (key)
 	{
-		//Insert node at the head of linkedList
-		//ofApp::
-	}
-	else if (key == 'w')
-	{
-		//Insert node at the tail of linkedList
-		//ofApp::
-	}
-	else if (key == 'a')
-	{
-		//Delete node at the head
-		//ofApp::
-	}
-	else if (key == 's')
-	{
-		//Delete node at the tail
-		//ofApp::
-	}
-	else if (key == 'e')
-	{
-		//Sort the linkedList by ascending order
-		//ofApp::
-	}
-	else if (key == 'z')
-	{
-		//Increase the amplitude
-		//ofApp::
-	}
-	else if (key == 'x')
-	{
-		//Decrease the amplitude
-		//ofApp::
+		case 'q':
+			//Insert node at the head of LinkedList
+		    //ofApp::
+			break;
+		case 'w':
+			//Insert node at the tail of LinkedList
+		    //ofApp::
+			break;
+		case 'a':
+			//Delete node at the head
+		    //ofApp::
+			break;
+		case 's':
+			//Delete node at the tail
+		    //ofApp::
+			break;
+		case 'e':
+			//Sort the LinkedList by ascending order
+		    //ofApp::
+			break;
+		case 'z':
+			//Increase the amplitude
+		    //ofApp::
+			break;
+		case 'x':
+			//Decrease the amplitude
+		    //ofApp::
+			break;
 	}
 }
 
@@ -64,10 +60,12 @@ void ofApp::keycodePressed(ofKeyEventArgs& e){
 	if (e.keycode == 262)
 	{
 		cout << "RightArrow";
+		//Move list to the right
 	}
 	if (e.keycode == 263)
 	{
 		cout << "LeftArrow";
+		//Move list to the left
 	}
 }
 
@@ -120,3 +118,92 @@ void ofApp::gotMessage(ofMessage msg){
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
 }
+
+//Code inspiré de https://www.geeksforgeeks.org/program-to-implement-singly-linked-list-in-c-using-class/
+class Node
+{
+public:
+	int data;
+	Node* next;
+
+	Node()
+	{
+		data = 0;
+		next = nullptr;
+	}
+
+	Node(int data)
+	{
+		this->data = data;
+		this->next = nullptr;
+	}
+};
+
+class LinkedList
+{
+	Node* head;
+
+public:
+	LinkedList()
+	{
+		head = nullptr;
+	}
+
+	void LinkedList::insertAtHead(int data)
+	{
+		Node* node = new Node(data);
+
+		//If the list is empty
+		if (head == nullptr)
+		{
+			head = node;
+			return;
+		}
+
+		node->next = head;
+		head = node;
+	}
+
+	void LinkedList::insertAtTail(int data)
+	{
+		Node* node = new Node(data);
+
+		//If the list is empty
+		if (head == nullptr)
+		{
+			head = node;
+			return;
+		}
+
+		Node* currentNode = head;
+		while (currentNode->next != nullptr)
+		{
+			currentNode = currentNode->next;
+		}
+
+		currentNode->next = node;
+	}
+
+	Node* LinkedList::deleteHead(Node* head)
+	{
+		//If the list is empty
+		if (head == nullptr)
+		{
+			return nullptr;
+		}
+
+		Node* temp = head;
+		head = head->next;
+		delete temp;
+
+		return head;
+	}
+
+	/*void LinkedList::deleteTail()
+	{
+	}*/
+
+	/*void LinkedList::sortLinkedList()
+	{
+	}*/
+};

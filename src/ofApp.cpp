@@ -139,6 +139,7 @@ public:
 	}
 };
 
+//-------------------------------------------------------
 class LinkedList
 {
 	Node* head;
@@ -192,6 +193,12 @@ public:
 			return nullptr;
 		}
 
+		//If the list has only 1 element
+		if (head->next == nullptr)
+		{
+			delete head;
+		}
+
 		Node* temp = head;
 		head = head->next;
 		delete temp;
@@ -199,9 +206,31 @@ public:
 		return head;
 	}
 
-	/*void LinkedList::deleteTail()
+	Node* LinkedList::deleteTail(Node* head)
 	{
-	}*/
+		//If the list is empty
+		if (head == nullptr)
+		{
+			return nullptr;
+		}
+
+		//If the list has only 1 element
+		if (head->next == nullptr)
+		{
+			delete head;
+		}
+
+		Node* node = head;
+		while (node != nullptr)
+		{
+			node = node->next;
+			if (node->next == nullptr)
+			{
+				delete node;
+			}
+		}
+		return node;
+	}
 
 	/*void LinkedList::sortLinkedList()
 	{

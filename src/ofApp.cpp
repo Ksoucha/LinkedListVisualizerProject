@@ -27,18 +27,19 @@ void ofApp::draw(){
 	ofDrawBitmapString("Press Z to increase the amplitude of the linked list", 40, 115);
 	ofDrawBitmapString("Press X to decrease the amplitude of the linked list", 40, 130);
 
-	float time = ofGetElapsedTimef() * 5; // Get time for animation
+	//Oscillation movement
+	float time = ofGetElapsedTimef() * 5;
 
-	for (int i = 0; i < numCircles; i++) 
+	for (int i = 0; i < numberCircles; i++) 
 	{
-		float x = i * spacing + 100 + offsetX; // X-position of the circle
-		float y = ofGetHeight() / 2 + amplitude * sin(time + i * 0.5); // Wave movement
+		float x = i * spacing + 100 + offsetX;
+		float y = ofGetHeight() / 2 + amplitude * sin(time + i * 0.5);
 
-		// Draw circles
+		//Draw circles
 		ofSetColor(255);
 		ofDrawCircle(x, y, 60);
 
-		// Draw lines connecting circles
+		//Draw lines connecting the circles
 		if (i > 0) 
 		{
 			float prevX = (i - 1) * spacing + 100 + offsetX;
@@ -88,19 +89,15 @@ void ofApp::keyPressed(int key){
 //Code inspiré de https://gist.github.com/stungeye/23580e5fef648e2798c069d9e7f83816
 void ofApp::keycodePressed(ofKeyEventArgs& e){
 
-	//cout << "KEY : " << e.key << endl;
-	//cout << "KEYCODE : " << e.keycode << endl;
-	//cout << "MODIFIERS : " << e.modifiers << endl;
-
 	if (e.keycode == 262)
 	{
-		cout << "RightArrow";
+		//RightArrow
 		//Move list to the right
 		offsetX += moveSpeed;
 	}
 	if (e.keycode == 263)
 	{
-		cout << "LeftArrow";
+		//LeftArrow
 		//Move list to the left
 		offsetX -= moveSpeed;
 	}

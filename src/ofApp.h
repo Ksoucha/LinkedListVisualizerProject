@@ -7,7 +7,7 @@ class ofApp : public ofBaseApp{
 	public:
 		float x = 100.f;
 
-		const int numCircles = 15;
+		const int numberCircles = 15;
 		float spacing = 150;        
 		float amplitude = 80;
 		float offsetX = 0;
@@ -60,6 +60,7 @@ public:
 	LinkedList()
 	{
 		head = nullptr;
+		newHead = nullptr;
 	}
 
 	void insertAtHead(int data);

@@ -3,54 +3,89 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofAddListener(ofGetWindowPtr()->events().keyPressed, this, &ofApp::keycodePressed);
+	ofSetFrameRate(60);
+	ofBackground(0);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 	//x += ofGetLastFrameTime() * 100;
+	float maxOffset = ofGetWidth() - (numCircles * spacing) - 100;
+	offsetX = ofClamp(offsetX, 0, maxOffset);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	//ofDrawCircle(x, 100, 100);
+
+	ofSetColor(255);
+	ofDrawBitmapString("Press Q to insert a node at the head of the linked list", 40, 40);
+	ofDrawBitmapString("Press W to insert a node at the tail of the linked list", 40, 55);
+	ofDrawBitmapString("Press A to delete the node at the head of the linked list", 40, 70);
+	ofDrawBitmapString("Press S to delete the node at the tail of the linked list", 40, 85);
+	ofDrawBitmapString("Press E to sort the linked list", 40, 100);
+	ofDrawBitmapString("Press Z to increase the amplitude of the linked list", 40, 115);
+	ofDrawBitmapString("Press X to decrease the amplitude of the linked list", 40, 130);
+
+	float time = ofGetElapsedTimef() * 5; // Get time for animation
+
+	for (int i = 0; i < numCircles; i++) 
+	{
+		float x = i * spacing + 100 + offsetX; // X-position of the circle
+		float y = ofGetHeight() / 2 + amplitude * sin(time + i * 0.5); // Wave movement
+
+		// Draw circles
+		ofSetColor(255);
+		ofDrawCircle(x, y, 60);
+
+		// Draw lines connecting circles
+		if (i > 0) 
+		{
+			float prevX = (i - 1) * spacing + 100 + offsetX;
+			float prevY = ofGetHeight() / 2 + amplitude * sin(time + (i - 1) * 0.5);
+			ofSetColor(255);
+			ofDrawLine(prevX, prevY, x, y);
+		}
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+	LinkedList linkedList;
 	switch (key)
 	{
 		case 'q':
 			//Insert node at the head of LinkedList
-		    //ofApp::
+			linkedList.insertAtHead(5);
 			break;
 		case 'w':
 			//Insert node at the tail of LinkedList
-		    //ofApp::
+			linkedList.insertAtTail(5);
 			break;
 		case 'a':
 			//Delete node at the head
-		    //ofApp::
+			//linkedList.deleteHead(node);
 			break;
 		case 's':
 			//Delete node at the tail
-		    //ofApp::
+			//linkedList.deleteTail(node);
 			break;
 		case 'e':
 			//Sort the LinkedList by ascending order
-		    //ofApp::
+			//linkedList.insertionSort(node);
 			break;
 		case 'z':
 			//Increase the amplitude
-		    //ofApp::
+			amplitude += 10;
 			break;
 		case 'x':
 			//Decrease the amplitude
-		    //ofApp::
+			amplitude -= 10;
 			break;
 	}
 }
 
-//Code inspire de https://gist.github.com/stungeye/23580e5fef648e2798c069d9e7f83816
+//Code inspiré de https://gist.github.com/stungeye/23580e5fef648e2798c069d9e7f83816
 void ofApp::keycodePressed(ofKeyEventArgs& e){
 
 	//cout << "KEY : " << e.key << endl;
@@ -61,11 +96,13 @@ void ofApp::keycodePressed(ofKeyEventArgs& e){
 	{
 		cout << "RightArrow";
 		//Move list to the right
+		offsetX += moveSpeed;
 	}
 	if (e.keycode == 263)
 	{
 		cout << "LeftArrow";
 		//Move list to the left
+		offsetX -= moveSpeed;
 	}
 }
 
@@ -119,120 +156,136 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
-//Code inspiré de https://www.geeksforgeeks.org/program-to-implement-singly-linked-list-in-c-using-class/
-class Node
+//--------------------------------------------------------------
+void LinkedList::insertAtHead(int data)
 {
-public:
-	int data;
-	Node* next;
+	Node* node = new Node(data);
 
-	Node()
+	//If the list is empty
+	if (head == nullptr)
 	{
-		data = 0;
-		next = nullptr;
-	}
-
-	Node(int data)
-	{
-		this->data = data;
-		this->next = nullptr;
-	}
-};
-
-//-------------------------------------------------------
-class LinkedList
-{
-	Node* head;
-
-public:
-	LinkedList()
-	{
-		head = nullptr;
-	}
-
-	void LinkedList::insertAtHead(int data)
-	{
-		Node* node = new Node(data);
-
-		//If the list is empty
-		if (head == nullptr)
-		{
-			head = node;
-			return;
-		}
-
-		node->next = head;
 		head = node;
+		return;
 	}
 
-	void LinkedList::insertAtTail(int data)
+	node->next = head;
+	head = node;
+}
+
+void LinkedList::insertAtTail(int data)
+{
+	Node* node = new Node(data);
+
+	//If the list is empty
+	if (head == nullptr)
 	{
-		Node* node = new Node(data);
-
-		//If the list is empty
-		if (head == nullptr)
-		{
-			head = node;
-			return;
-		}
-
-		Node* currentNode = head;
-		while (currentNode->next != nullptr)
-		{
-			currentNode = currentNode->next;
-		}
-
-		currentNode->next = node;
+		head = node;
+		return;
 	}
 
-	Node* LinkedList::deleteHead(Node* head)
+	Node* currentNode = head;
+	while (currentNode->next != nullptr)
 	{
-		//If the list is empty
-		if (head == nullptr)
-		{
-			return nullptr;
-		}
+		currentNode = currentNode->next;
+	}
 
-		//If the list has only 1 element
-		if (head->next == nullptr)
-		{
-			delete head;
-		}
+	currentNode->next = node;
+}
 
-		Node* temp = head;
+Node* LinkedList::deleteHead(Node* head)
+{
+	//If the list is empty
+	if (head == nullptr)
+	{
+		return nullptr;
+	}
+
+	//If the list has only 1 element
+	if (head->next == nullptr)
+	{
+		delete head;
+	}
+
+	Node* temp = head;
+	head = head->next;
+	delete temp;
+
+	return head;
+}
+
+Node* LinkedList::deleteTail(Node* head)
+{
+	//If the list is empty
+	if (head == nullptr)
+	{
+		return nullptr;
+	}
+
+	//If the list has only 1 element
+	if (head->next == nullptr)
+	{
+		delete head;
+	}
+
+	Node* node = head;
+	while (node != nullptr)
+	{
+		node = node->next;
+		if (node->next == nullptr)
+		{
+			delete node;
+		}
+	}
+	return node;
+}
+
+//--------------------------------------------------------------
+void LinkedList::addValues(int value)
+{
+	Node* newNode = new Node(value);
+	newNode->next = head;
+
+	head = newNode;
+}
+
+void LinkedList::insertionSort(Node* headref)
+{
+	newHead = nullptr;
+	Node* current = headref;
+	while (current != nullptr)
+	{
+		Node* temp = current->next;
+		sortedInsert(current);
+		current = temp;
+	}
+	head = newHead;
+}
+
+void LinkedList::sortedInsert(Node* newNode)
+{
+	if (newHead == nullptr || newHead->data >= newNode->data)
+	{
+		newNode->next = newHead;
+		newHead = newNode;
+	}
+	else
+	{
+		Node* current = newHead;
+
+		while (current->next != nullptr && current->next->data < newNode->data)
+		{
+			current = current->next;
+		}
+		newNode->next = current->next;
+		current->next = newNode;
+	}
+}
+
+void LinkedList::printList(Node* head)
+{
+	while (head != nullptr)
+	{
+		cout << head->data << std::endl;
 		head = head->next;
-		delete temp;
-
-		return head;
 	}
-
-	Node* LinkedList::deleteTail(Node* head)
-	{
-		//If the list is empty
-		if (head == nullptr)
-		{
-			return nullptr;
-		}
-
-		//If the list has only 1 element
-		if (head->next == nullptr)
-		{
-			delete head;
-		}
-
-		Node* node = head;
-		while (node != nullptr)
-		{
-			node = node->next;
-			if (node->next == nullptr)
-			{
-				delete node;
-			}
-		}
-		return node;
-	}
-
-	/*void LinkedList::sortLinkedList()
-	{
-	}*/
-};
+}

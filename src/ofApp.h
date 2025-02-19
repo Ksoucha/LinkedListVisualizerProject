@@ -7,6 +7,12 @@ class ofApp : public ofBaseApp{
 	public:
 		float x = 100.f;
 
+		const int numCircles = 15;
+		float spacing = 150;        
+		float amplitude = 80;
+		float offsetX = 0;
+		float moveSpeed = 5;    
+
 		void setup();
 		void update();
 		void draw();
@@ -23,10 +29,46 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		void keycodePressed(ofKeyEventArgs& e);
+};
 
-		//void insertAtHead(int data);
-		//void insertAtTail(int data);
-		//void deleteHead(int data);
-		//void deleteTail(int data);
-		//void sortLinkedList();
+class Node
+{
+public:
+	int data;
+	Node* next;
+
+	Node()
+	{
+		data = 0;
+		next = nullptr;
+	}
+
+	Node(int data)
+	{
+		this->data = data;
+		this->next = nullptr;
+	}
+};
+
+//-------------------------------------------------------
+class LinkedList
+{
+	Node* head;
+	Node* newHead;
+
+public:
+	LinkedList()
+	{
+		head = nullptr;
+	}
+
+	void insertAtHead(int data);
+	void insertAtTail(int data);
+	Node* deleteHead(Node* head);
+	Node* deleteTail(Node* head);
+
+	void addValues(int value);
+	void insertionSort(Node* headref);
+	void sortedInsert(Node* newNode);
+	void printList(Node* head);
 };

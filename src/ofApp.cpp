@@ -5,12 +5,18 @@ void ofApp::setup(){
 	ofAddListener(ofGetWindowPtr()->events().keyPressed, this, &ofApp::keycodePressed);
 	ofSetFrameRate(60);
 	ofBackground(0);
+
+	//generateRandomLinkedList(1);
+	circles.push_back(2);
+	circles.push_back(5);
+	circles.push_back(7);
+	circles.push_back(2);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 	//x += ofGetLastFrameTime() * 100;
-	float maxOffset = ofGetWidth() - (numCircles * spacing) - 100;
+	float maxOffset = ofGetWidth() - (circles.size() * spacing) - 100;
 	offsetX = ofClamp(offsetX, 0, maxOffset);
 }
 
@@ -27,17 +33,17 @@ void ofApp::draw(){
 	ofDrawBitmapString("Press Z to increase the amplitude of the linked list", 40, 115);
 	ofDrawBitmapString("Press X to decrease the amplitude of the linked list", 40, 130);
 
-	//Oscillation movement
+	//Oscillation movement - Écrit avec l'aide de l'IA
 	float time = ofGetElapsedTimef() * 5;
 
-	for (int i = 0; i < numberCircles; i++) 
+	for (int i = 0; i < circles.size(); i++) 
 	{
 		float x = i * spacing + 100 + offsetX;
 		float y = ofGetHeight() / 2 + amplitude * sin(time + i * 0.5);
 
 		//Draw circles
 		ofSetColor(255);
-		ofDrawCircle(x, y, 60);
+		ofDrawCircle(x, y, circles[i]);
 
 		//Draw lines connecting the circles
 		if (i > 0) 
@@ -154,6 +160,17 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 //--------------------------------------------------------------
+void generateRandomLinkedList(int size, int minValue = 1, int maxValue = 100) 
+{
+	LinkedList linkedList;
+	srand(time(0));
+	for (int i = 0; i < size; i++) 
+	{
+		int randomValue = minValue + (rand() % (maxValue - minValue + 1));
+		linkedList.insertAtTail(randomValue);
+	}
+}
+
 void LinkedList::insertAtHead(int data)
 {
 	Node* node = new Node(data);
@@ -206,7 +223,6 @@ Node* LinkedList::deleteHead(Node* head)
 	Node* temp = head;
 	head = head->next;
 	delete temp;
-
 	return head;
 }
 
@@ -236,6 +252,7 @@ Node* LinkedList::deleteTail(Node* head)
 	return node;
 }
 
+//Code inspiré de https://www.prepbytes.com/blog/linked-list/insertion-sort-for-singly-linked-list/
 //--------------------------------------------------------------
 void LinkedList::addValues(int value)
 {

@@ -7,7 +7,7 @@ class ofApp : public ofBaseApp{
 	public:
 		float x = 100.f;
 
-		const int numberCircles = 15;
+		std::vector<int> circles;
 		float spacing = 150;        
 		float amplitude = 80;
 		float offsetX = 0;

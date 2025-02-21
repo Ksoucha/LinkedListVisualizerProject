@@ -1,30 +1,35 @@
 #include "ofApp.h"
 
+LinkedList* generateRandomLinkedList(int size)
+{
+	LinkedList* linkedList = new LinkedList();
+	srand(time(0));
+	for (int i = 0; i < size; i++)
+	{
+		int randomValue = 1 + (rand() % 95);
+		linkedList->insertAtTail(randomValue);
+	}
+	return linkedList;
+}
+
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofAddListener(ofGetWindowPtr()->events().keyPressed, this, &ofApp::keycodePressed);
 	ofSetFrameRate(60);
-	ofBackground(0);
+	ofBackground(ofColor::black);
 
-	//generateRandomLinkedList(1);
-	circles.push_back(2);
-	circles.push_back(5);
-	circles.push_back(7);
-	circles.push_back(2);
+	mainLinkedList = generateRandomLinkedList(1);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	//x += ofGetLastFrameTime() * 100;
-	float maxOffset = ofGetWidth() - (circles.size() * spacing) - 100;
+	float maxOffset = ofGetWidth() - (mainLinkedList->GetSize() * spacing) - 100;
 	offsetX = ofClamp(offsetX, 0, maxOffset);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	//ofDrawCircle(x, 100, 100);
-
-	ofSetColor(255);
+	ofSetColor(ofColor::white);
 	ofDrawBitmapString("Press Q to insert a node at the head of the linked list", 40, 40);
 	ofDrawBitmapString("Press W to insert a node at the tail of the linked list", 40, 55);
 	ofDrawBitmapString("Press A to delete the node at the head of the linked list", 40, 70);
@@ -36,50 +41,64 @@ void ofApp::draw(){
 	//Oscillation movement - Écrit avec l'aide de l'IA
 	float time = ofGetElapsedTimef() * 5;
 
-	for (int i = 0; i < circles.size(); i++) 
+	Node* currentNode = mainLinkedList->GetHead();
+	int index = 0;
+	while (currentNode)
 	{
-		float x = i * spacing + 100 + offsetX;
-		float y = ofGetHeight() / 2 + amplitude * sin(time + i * 0.5);
+		float x = index * spacing + 100 + offsetX;
+		float y = ofGetHeight() / 2 + amplitude * sin(time + index * 0.5);
 
 		//Draw circles
-		ofSetColor(255);
-		ofDrawCircle(x, y, circles[i]);
+		ofSetColor(ofColor::white);
+		ofDrawCircle(x, y, currentNode->data);
+		ofSetColor(ofColor::black);
+		ofDrawBitmapString(ofToString(currentNode->data), x, y);
 
 		//Draw lines connecting the circles
-		if (i > 0) 
+		if (index > 0)
 		{
-			float prevX = (i - 1) * spacing + 100 + offsetX;
-			float prevY = ofGetHeight() / 2 + amplitude * sin(time + (i - 1) * 0.5);
-			ofSetColor(255);
+			float prevX = (index - 1) * spacing + 100 + offsetX;
+			float prevY = ofGetHeight() / 2 + amplitude * sin(time + (index - 1) * 0.5);
+			ofSetColor(ofColor::white);
 			ofDrawLine(prevX, prevY, x, y);
 		}
+
+		currentNode = currentNode->next;
+		index++;
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	LinkedList linkedList;
 	switch (key)
 	{
 		case 'q':
-			//Insert node at the head of LinkedList
-			linkedList.insertAtHead(5);
+			{
+				//Insert node at the head of LinkedList
+				srand(time(0));
+				int randomValue = 1 + (rand() % 95);
+				mainLinkedList->insertAtHead(randomValue);
+			}
 			break;
 		case 'w':
-			//Insert node at the tail of LinkedList
-			linkedList.insertAtTail(5);
+			{
+				//Insert node at the tail of LinkedList
+				srand(time(0));
+				int randomValue = 1 + (rand() % 95);
+				mainLinkedList->insertAtTail(randomValue);
+			}
 			break;
 		case 'a':
 			//Delete node at the head
-			//linkedList.deleteHead(node);
+			mainLinkedList->deleteHead();
 			break;
 		case 's':
 			//Delete node at the tail
-			//linkedList.deleteTail(node);
+			mainLinkedList->deleteTail();
 			break;
 		case 'e':
 			//Sort the LinkedList by ascending order
-			//linkedList.insertionSort(node);
+			mainLinkedList->insertionSort();
 			break;
 		case 'z':
 			//Increase the amplitude
@@ -160,16 +179,6 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 //--------------------------------------------------------------
-void generateRandomLinkedList(int size, int minValue = 1, int maxValue = 100) 
-{
-	LinkedList linkedList;
-	srand(time(0));
-	for (int i = 0; i < size; i++) 
-	{
-		int randomValue = minValue + (rand() % (maxValue - minValue + 1));
-		linkedList.insertAtTail(randomValue);
-	}
-}
 
 void LinkedList::insertAtHead(int data)
 {
@@ -184,6 +193,7 @@ void LinkedList::insertAtHead(int data)
 
 	node->next = head;
 	head = node;
+	size++;
 }
 
 void LinkedList::insertAtTail(int data)
@@ -204,52 +214,57 @@ void LinkedList::insertAtTail(int data)
 	}
 
 	currentNode->next = node;
+	size++;
 }
 
-Node* LinkedList::deleteHead(Node* head)
+void LinkedList::deleteHead()
 {
 	//If the list is empty
 	if (head == nullptr)
 	{
-		return nullptr;
+		return;
 	}
 
 	//If the list has only 1 element
 	if (head->next == nullptr)
 	{
 		delete head;
+		head = nullptr;
+		return;
 	}
 
 	Node* temp = head;
 	head = head->next;
 	delete temp;
-	return head;
+	temp = nullptr;
+	size--;
 }
 
-Node* LinkedList::deleteTail(Node* head)
+void LinkedList::deleteTail()
 {
 	//If the list is empty
 	if (head == nullptr)
 	{
-		return nullptr;
+		return;
 	}
 
 	//If the list has only 1 element
 	if (head->next == nullptr)
 	{
 		delete head;
+		head = nullptr;
+		return;
 	}
 
 	Node* node = head;
-	while (node != nullptr)
-	{
+	while (node->next->next)
+	{	
 		node = node->next;
-		if (node->next == nullptr)
-		{
-			delete node;
-		}
 	}
-	return node;
+
+	delete node->next;
+	node->next = nullptr;
+	size--;
 }
 
 //Code inspiré de https://www.prepbytes.com/blog/linked-list/insertion-sort-for-singly-linked-list/
@@ -260,22 +275,23 @@ void LinkedList::addValues(int value)
 	newNode->next = head;
 
 	head = newNode;
+	size++;
 }
 
-void LinkedList::insertionSort(Node* headref)
+void LinkedList::insertionSort()
 {
-	newHead = nullptr;
-	Node* current = headref;
+	Node* newHead = nullptr;
+	Node* current = head;
 	while (current != nullptr)
 	{
 		Node* temp = current->next;
-		sortedInsert(current);
+		newHead = sortedInsert(current, newHead);
 		current = temp;
 	}
 	head = newHead;
 }
 
-void LinkedList::sortedInsert(Node* newNode)
+Node* LinkedList::sortedInsert(Node* newNode, Node* newHead)
 {
 	if (newHead == nullptr || newHead->data >= newNode->data)
 	{
@@ -293,6 +309,7 @@ void LinkedList::sortedInsert(Node* newNode)
 		newNode->next = current->next;
 		current->next = newNode;
 	}
+	return newHead;
 }
 
 void LinkedList::printList(Node* head)

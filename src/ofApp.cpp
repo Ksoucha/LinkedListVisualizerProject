@@ -37,6 +37,8 @@ void ofApp::draw(){
 	ofDrawBitmapString("Press E to sort the linked list", 40, 100);
 	ofDrawBitmapString("Press Z to increase the amplitude of the linked list", 40, 115);
 	ofDrawBitmapString("Press X to decrease the amplitude of the linked list", 40, 130);
+	ofDrawBitmapString("Press left arrow to move the list to the left", 40, 145);
+	ofDrawBitmapString("Press right arrow to move the list to the right", 40, 160);
 
 	//Oscillation movement - Écrit avec l'aide de l'IA
 	float time = ofGetElapsedTimef() * 5;

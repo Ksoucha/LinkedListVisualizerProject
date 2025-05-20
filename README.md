@@ -28,7 +28,3 @@ This project focuses on the following aspects: **linked lists, dynamic memory al
 1. Clone the repository
 2. Navigate to the project folder
 3. Open the file _LinkedListVisualizer.sln_
-
-### Requirements
-* Visual Studio
-* OpenFrameworks
